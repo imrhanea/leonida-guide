@@ -20,6 +20,7 @@ SITE_NAME = "Leonida Guide"
 NAV = [
     ("index.html", "Accueil"),
     ("sortie.html", "Sortie & prix"),
+    ("notes-presse.html", "Notes de la presse"),
     ("argent.html", "Gagner de l'argent"),
     ("codes-triche.html", "Codes de triche"),
     ("collection.html", "Objets à collectionner"),
