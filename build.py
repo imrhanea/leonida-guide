@@ -28,6 +28,7 @@ NAV = [
     ("collection.html", "Objets à collectionner"),
     ("carte.html", "Carte"),
     ("ssd-ps5.html", "Place sur PS5"),
+    ("problemes.html", "Problèmes & solutions"),
     ("personnages.html", "Personnages"),
 ]
 
