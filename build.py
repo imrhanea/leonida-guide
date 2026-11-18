@@ -66,7 +66,8 @@ def build():
                 .replace("{{updated}}", f"{d.day} {mois} {d.year}")
                 .replace("{{content}}", body))
         (DIST / name).write_text(html, encoding="utf-8")
-        urls.append((canonical, updated))
+        if name != "404.html":
+            urls.append((canonical, updated))
     sitemap = "\n".join(f"  <url><loc>{u}</loc><lastmod>{m}</lastmod></url>" for u, m in urls)
     (DIST / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

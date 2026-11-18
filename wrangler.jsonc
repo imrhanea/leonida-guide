@@ -1,0 +1,9 @@
+{
+  // Configuration Cloudflare : sert le site statique généré dans dist/
+  "name": "leonida-guide",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
