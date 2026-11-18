@@ -20,6 +20,7 @@ SITE_NAME = "Leonida Guide"
 NAV = [
     ("index.html", "Accueil"),
     ("sortie.html", "Sortie & prix"),
+    ("reglages.html", "Réglages & débuter"),
     ("notes-presse.html", "Notes de la presse"),
     ("fps-ps5-pro.html", "30 ou 60 FPS"),
     ("duree-de-vie.html", "Durée de vie"),
