@@ -1,0 +1,52 @@
+---
+title: Objets à collectionner GTA 6 : liste à cocher avec ta progression
+description: Suis ta progression dans GTA 6 avec notre liste à cocher des objets à collectionner. Ta progression est gardée dans ton navigateur. Mise à jour au fil des découvertes.
+updated: 2026-11-18
+---
+<h1>Objets à collectionner GTA 6</h1>
+<p class="lead">Coche ce que tu as trouvé : ta progression reste enregistrée sur ton appareil.</p>
+
+<p class="note"><span class="badge">En cours</span> Les catégories et emplacements seront ajoutés dès qu'ils sont découverts en jeu.</p>
+
+<div id="tracker"></div>
+<p><button id="reset" type="button">Remettre à zéro</button></p>
+
+<script>
+// Pour ajouter des objets : remplir "items" avec { id: "unique", name: "Nom", where: "Emplacement" }.
+var CATEGORIES = [];
+
+(function () {
+  var KEY = 'leonida-collection-v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var root = document.getElementById('tracker');
+
+  function render() {
+    if (!CATEGORIES.length) {
+      root.innerHTML = '<p class="empty">Aucune catégorie confirmée pour l’instant.</p>';
+      return;
+    }
+    root.innerHTML = '';
+    CATEGORIES.forEach(function (cat) {
+      var box = document.createElement('section');
+      box.className = 'tracker-cat';
+      var done = cat.items.filter(function (it) { return state[it.id]; }).length;
+      box.innerHTML = '<h3><span>' + cat.name + '</span><small>' + done + ' / ' + cat.items.length + '</small></h3>' +
+        '<div class="bar"><i style="width:' + (cat.items.length ? done / cat.items.length * 100 : 0) + '%"></i></div>';
+      if (!cat.items.length) box.insertAdjacentHTML('beforeend', '<p class="empty">Emplacements à venir.</p>');
+      cat.items.forEach(function (it) {
+        var l = document.createElement('label');
+        l.innerHTML = '<input type="checkbox"' + (state[it.id] ? ' checked' : '') + '><span><strong>' + it.name + '</strong><br><small>' + (it.where || '') + '</small></span>';
+        l.querySelector('input').addEventListener('change', function (e) { state[it.id] = e.target.checked; save(); render(); });
+        box.appendChild(l);
+      });
+      root.appendChild(box);
+    });
+  }
+  document.getElementById('reset').addEventListener('click', function () {
+    if (confirm('Effacer toute ta progression ?')) { state = {}; save(); render(); }
+  });
+  render();
+})();
+</script>

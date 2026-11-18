@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}} | {{site_name}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{canonical}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fr_FR">
+<meta property="article:modified_time" content="{{updated_iso}}">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>{{site_name}}</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  </div>
+  <nav id="nav" class="wrap nav">{{nav}}</nav>
+</header>
+<main class="wrap">
+  <p class="updated">Mis à jour le <time datetime="{{updated_iso}}">{{updated}}</time></p>
+{{content}}
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>{{site_name}}</strong> est un site de fans indépendant, non officiel, sans lien avec Rockstar Games ni Take-Two Interactive. Grand Theft Auto et GTA sont des marques de Take-Two Interactive.</p>
+    <p><a href="mentions-legales.html">Mentions légales &amp; confidentialité</a></p>
+  </div>
+</footer>
+<script>
+document.querySelector('.nav-toggle').addEventListener('click', function () {
+  var open = document.body.classList.toggle('nav-open');
+  this.setAttribute('aria-expanded', open);
+});
+</script>
+</body>
+</html>

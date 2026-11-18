@@ -1,0 +1,49 @@
+---
+title: GTA 6 : guides, astuces et outils en français
+description: Tout GTA 6 en français : heure de sortie, prix, astuces pour gagner de l'argent, codes de triche, objets à collectionner et carte de Leonida. Mis à jour chaque jour.
+updated: 2026-11-18
+---
+<section class="hero">
+  <h1>GTA 6 : le guide français, mis à jour chaque jour</h1>
+  <p>Sortie le jeudi 19 novembre 2026 sur PS5 et Xbox Series X|S. Ouverture prévue à minuit, heure de Paris, sur PS5.</p>
+  <div class="countdown" id="countdown" aria-live="polite">
+    <div><b data-u="d">–</b><span>jours</span></div>
+    <div><b data-u="h">–</b><span>heures</span></div>
+    <div><b data-u="m">–</b><span>min</span></div>
+    <div><b data-u="s">–</b><span>sec</span></div>
+  </div>
+</section>
+
+<h2>Les guides</h2>
+<div class="cards">
+  <a class="card" href="sortie.html"><h3>Heure de sortie, prix &amp; taille</h3><p>À quelle heure jouer, combien de Go libérer, quelle édition choisir.</p></a>
+  <a class="card" href="argent.html"><h3>Gagner de l'argent vite</h3><p>Les meilleures méthodes pour s'enrichir en début de partie.</p></a>
+  <a class="card" href="codes-triche.html"><h3>Codes de triche PS5 &amp; Xbox</h3><p>La liste complète dès qu'ils sont découverts.</p></a>
+  <a class="card" href="collection.html"><h3>Objets à collectionner</h3><p>Une liste à cocher qui garde ta progression.</p></a>
+  <a class="card" href="carte.html"><h3>Carte de Leonida</h3><p>Vice City, les Keys, Grassrivers et les autres régions.</p></a>
+  <a class="card" href="personnages.html"><h3>Lucia &amp; Jason</h3><p>Qui sont les deux héros de GTA 6.</p></a>
+</div>
+
+<h2>Dernières mises à jour</h2>
+<ul>
+  <li><strong>18 novembre :</strong> ouverture du site. Heure de sortie, prix, éditions, carte et personnages.</li>
+</ul>
+
+<script>
+(function () {
+  var target = new Date('2026-11-19T00:00:00+01:00').getTime();
+  var box = document.getElementById('countdown');
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      box.innerHTML = '<div><b>Disponible</b><span>sur PS5 depuis minuit</span></div>';
+      return;
+    }
+    var s = Math.floor(diff / 1000);
+    var v = { d: Math.floor(s / 86400), h: Math.floor(s % 86400 / 3600), m: Math.floor(s % 3600 / 60), s: s % 60 };
+    for (var k in v) box.querySelector('[data-u="' + k + '"]').textContent = String(v[k]).padStart(2, '0');
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
