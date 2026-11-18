@@ -91,3 +91,6 @@ summary { cursor: pointer; font-weight: 600; }
 .empty { color: var(--muted); font-style: italic; margin: 0; }
 .site-footer { border-top: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.85rem; padding: 20px 0; }
 .site-footer a { color: var(--muted); }
+.counter { display: flex; gap: 8px; }
+.counter button, #reset { font: inherit; font-size: 0.95rem; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; min-width: 48px; }
+.counter button:hover, #reset:hover { border-color: var(--accent); color: var(--accent); }
