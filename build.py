@@ -55,7 +55,7 @@ def build():
         d = datetime.date.fromisoformat(updated)
         mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
                 "août", "septembre", "octobre", "novembre", "décembre"][d.month - 1]
-        canonical = f"{SITE_URL}/" if name == "index.html" else f"{SITE_URL}/{name}"
+        canonical = f"{SITE_URL}/" if name == "index.html" else f"{SITE_URL}/{name[:-5]}"
         html = (template
                 .replace("{{title}}", meta["title"])
                 .replace("{{description}}", meta["description"])
@@ -65,6 +65,10 @@ def build():
                 .replace("{{updated_iso}}", updated)
                 .replace("{{updated}}", f"{d.day} {mois} {d.year}")
                 .replace("{{content}}", body))
+        # Liens internes sans ".html" : Cloudflare sert /argent à partir de argent.html
+        html = re.sub(r'href="([a-z0-9-]+)\.html"',
+                      lambda m: 'href="/"' if m.group(1) == "index" else f'href="/{m.group(1)}"', html)
+        html = html.replace('href="style.css"', 'href="/style.css"')
         (DIST / name).write_text(html, encoding="utf-8")
         if name != "404.html":
             urls.append((canonical, updated))
