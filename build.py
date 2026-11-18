@@ -14,7 +14,7 @@ import pathlib, re, shutil, datetime
 ROOT = pathlib.Path(__file__).parent
 SRC = ROOT / "src" / "pages"
 DIST = ROOT / "dist"
-SITE_URL = "https://www.leonida-guide.fr"  # à remplacer par le vrai domaine
+SITE_URL = "https://leonida-guide.imrhane-a-483.workers.dev"  # à remplacer quand le domaine .fr sera acheté
 SITE_NAME = "Leonida Guide"
 
 NAV = [
