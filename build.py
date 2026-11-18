@@ -21,6 +21,8 @@ NAV = [
     ("index.html", "Accueil"),
     ("sortie.html", "Sortie & prix"),
     ("notes-presse.html", "Notes de la presse"),
+    ("fps-ps5-pro.html", "30 ou 60 FPS"),
+    ("duree-de-vie.html", "Durée de vie"),
     ("argent.html", "Gagner de l'argent"),
     ("codes-triche.html", "Codes de triche"),
     ("collection.html", "Objets à collectionner"),
