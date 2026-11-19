@@ -231,36 +231,47 @@ def caption(d, text, y=1500, size=72):
 WORD_DELAY = 0.11  # secondes entre deux mots qui apparaissent
 
 
-def words_caption(d, text, lt, y=1430, size=96, maxw=980):
+def words_caption(d, text, lt, y=1430, size=96, maxw=980, delay=WORD_DELAY):
     """Sous-titres mot par mot (style karaoké). lt = secondes depuis le début de la phrase.
     Les mots entre **…** sont en jaune ; le dernier mot apparu « saute » légèrement."""
+    # un « mot » peut avoir plusieurs morceaux de couleurs différentes (ex. « 250 000 $ » + « . »)
     toks = []
-    for i, seg in enumerate(text.split("**")):
-        for w_ in seg.split():
-            toks.append((w_, i % 2 == 1))
-    shown = min(len(toks), int(lt / WORD_DELAY) + 1)
+    segs = text.split("**")
+    for i, seg in enumerate(segs):
+        hl = i % 2 == 1
+        glue = i > 0 and not segs[i - 1].endswith(" ")
+        for j, w_ in enumerate(seg.split(" ")):
+            if not w_:
+                continue
+            if j == 0 and toks and glue:
+                toks[-1].append((w_, hl))     # collé au mot précédent (pas d'espace entre)
+            else:
+                toks.append([(w_, hl)])
+    shown = min(len(toks), int(lt / delay) + 1)
     f = font(size)
     space = d.textlength(" ", font=f)
-    # mise en page de toutes les lignes (pour que le texte ne bouge pas)
     lines, cur, cw = [], [], 0
-    for w_, h in toks:
-        ww = d.textlength(w_, font=f)
+    for tok in toks:
+        ww = sum(d.textlength(t_, font=f) for t_, _ in tok)
         if cur and cw + space + ww > maxw:
             lines.append((cur, cw))
             cur, cw = [], 0
         cw = cw + (space if cur else 0) + ww
-        cur.append((w_, h, ww))
+        cur.append((tok, ww))
     if cur:
         lines.append((cur, cw))
     idx = 0
     for li, (ws, lw) in enumerate(lines):
         x = (W - lw) / 2
-        for w_, h, ww in ws:
+        for tok, ww in ws:
             if idx < shown:
-                pop = 1.0 if idx < shown - 1 else ease((lt - idx * WORD_DELAY) / 0.12)
+                pop = 1.0 if idx < shown - 1 else ease((lt - idx * delay) / 0.12)
                 yy = y + li * (size + 26) + (1 - pop) * 18
-                d.text((x, yy), w_, font=f, fill=YELLOW if h else WHITE,
-                       stroke_width=12, stroke_fill=(10, 5, 20))
+                xx = x
+                for t_, h in tok:
+                    d.text((xx, yy), t_, font=f, fill=YELLOW if h else WHITE,
+                           stroke_width=12, stroke_fill=(10, 5, 20))
+                    xx += d.textlength(t_, font=f)
             x += ww + space
             idx += 1
 
@@ -295,14 +306,14 @@ def badge(d, n, k=1.0):
 
 # ---------- rendu ----------
 
-def render(out, duration, draw_frame):
-    """draw_frame(t) -> PIL Image 1080x1920 RGB."""
+def render(out, duration, draw_frame, audio=None):
+    """draw_frame(t) -> PIL Image 1080x1920 RGB. audio : piste son optionnelle."""
     n = int(duration * FPS)
     p = subprocess.Popen([
         "ffmpeg", "-y", "-loglevel", "error",
         "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-        "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
-        "-shortest", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+        *(["-i", str(audio)] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]),
+        "-t", f"{duration:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
         "-pix_fmt", "yuv420p", "-c:a", "aac", "-movflags", "+faststart", str(out)],
         stdin=subprocess.PIPE)
     for i in range(n):
