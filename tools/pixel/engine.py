@@ -228,6 +228,64 @@ def caption(d, text, y=1500, size=72):
         draw_rich(d, y + i * (size + 22), ln, size)
 
 
+WORD_DELAY = 0.11  # secondes entre deux mots qui apparaissent
+
+
+def words_caption(d, text, lt, y=1430, size=96, maxw=980):
+    """Sous-titres mot par mot (style karaoké). lt = secondes depuis le début de la phrase.
+    Les mots entre **…** sont en jaune ; le dernier mot apparu « saute » légèrement."""
+    toks = []
+    for i, seg in enumerate(text.split("**")):
+        for w_ in seg.split():
+            toks.append((w_, i % 2 == 1))
+    shown = min(len(toks), int(lt / WORD_DELAY) + 1)
+    f = font(size)
+    space = d.textlength(" ", font=f)
+    # mise en page de toutes les lignes (pour que le texte ne bouge pas)
+    lines, cur, cw = [], [], 0
+    for w_, h in toks:
+        ww = d.textlength(w_, font=f)
+        if cur and cw + space + ww > maxw:
+            lines.append((cur, cw))
+            cur, cw = [], 0
+        cw = cw + (space if cur else 0) + ww
+        cur.append((w_, h, ww))
+    if cur:
+        lines.append((cur, cw))
+    idx = 0
+    for li, (ws, lw) in enumerate(lines):
+        x = (W - lw) / 2
+        for w_, h, ww in ws:
+            if idx < shown:
+                pop = 1.0 if idx < shown - 1 else ease((lt - idx * WORD_DELAY) / 0.12)
+                yy = y + li * (size + 26) + (1 - pop) * 18
+                d.text((x, yy), w_, font=f, fill=YELLOW if h else WHITE,
+                       stroke_width=12, stroke_fill=(10, 5, 20))
+            x += ww + space
+            idx += 1
+
+
+def fx(low, t_since_cut, shake=0.0, t=0.0):
+    """Effets sur la petite toile : zoom rapide après chaque coupe + tremblement.
+    Renvoie une image de même taille."""
+    z = 1 + 0.07 * max(0.0, 1 - t_since_cut / 0.25)
+    ox = int(round(shake * math.sin(t * 90)))
+    oy = int(round(shake * math.cos(t * 77)))
+    if z <= 1.001 and ox == 0 and oy == 0:
+        return low
+    cw, ch = LW / z, LH / z
+    left = (LW - cw) / 2 + ox
+    top = (LH - ch) / 2 + oy
+    return low.crop((int(left), int(top), int(left + cw), int(top + ch))).resize((LW, LH), Image.NEAREST)
+
+
+def flash(img, k):
+    """Flash blanc (k de 1 à 0)."""
+    if k <= 0:
+        return img
+    return Image.blend(img, Image.new("RGB", img.size, (255, 255, 255)), min(1.0, k) * 0.85)
+
+
 def badge(d, n, k=1.0):
     """Grand numéro d'étape en haut à gauche."""
     f = font(150)
