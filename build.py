@@ -27,6 +27,7 @@ NAV = [
     ("argent.html", "Gagner de l'argent"),
     ("codes-triche.html", "Codes de triche"),
     ("collection.html", "Objets à collectionner"),
+    ("secrets.html", "Secrets"),
     ("carte.html", "Carte"),
     ("ssd-ps5.html", "Place sur PS5"),
     ("problemes.html", "Problèmes & solutions"),
